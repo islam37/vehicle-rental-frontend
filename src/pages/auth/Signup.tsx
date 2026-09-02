@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 import { api } from '../../lib/axios';
 import { signupSchema, type SignupFormData } from '../../schemas/auth.schema';
 import type { ApiResponse, User } from '../../types';
+import AuthLayout from '../../components/auth/AuthLayout';
+import FormField from '../../components/auth/FormField';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -21,89 +23,50 @@ export default function Signup() {
   const onSubmit = async (formData: SignupFormData) => {
     try {
       await api.post<ApiResponse<User>>('/auth/signup', formData);
-      toast.success('Account created successfully. Please log in.');
+      toast.success('Account created. Please log in.');
       navigate('/login');
     } catch (error: any) {
-      const message = error.response?.data?.errors || 'Registration failed';
-      toast.error(message);
+      toast.error(error.response?.data?.errors || 'Registration failed');
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-sm rounded-lg bg-white p-8 shadow-md"
-      >
-        <h1 className="mb-6 text-2xl font-bold text-gray-800">Create Account</h1>
+    <AuthLayout title="Create account" subtitle="Set up your account to start renting.">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormField
+          label="Full name"
+          type="text"
+          placeholder="John Doe"
+          registration={register('name')}
+          error={errors.name?.message}
+        />
+        <FormField
+          label="Email"
+          type="email"
+          placeholder="you@example.com"
+          registration={register('email')}
+          error={errors.email?.message}
+        />
+        <FormField
+          label="Phone"
+          type="tel"
+          placeholder="01XXXXXXXXX"
+          registration={register('phone')}
+          error={errors.phone?.message}
+        />
+        <FormField
+          label="Password"
+          type="password"
+          placeholder="At least 6 characters"
+          registration={register('password')}
+          error={errors.password?.message}
+        />
 
         <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium text-gray-700">
-            Full Name
-          </label>
-          <input
-            {...register('name')}
-            type="text"
-            placeholder="John Doe"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            {...register('email')}
-            type="email"
-            placeholder="you@example.com"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium text-gray-700">
-            Phone
-          </label>
-          <input
-            {...register('phone')}
-            type="tel"
-            placeholder="01XXXXXXXXX"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          />
-          {errors.phone && (
-            <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="mb-1 block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <input
-            {...register('password')}
-            type="password"
-            placeholder="At least 6 characters"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
-          )}
-        </div>
-
-        <div className="mb-6">
-          <label className="mb-1 block text-sm font-medium text-gray-700">
-            Account Type
-          </label>
+          <label className="mb-1.5 block text-sm font-medium text-ink">Account type</label>
           <select
             {...register('role')}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-sm text-ink focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink"
           >
             <option value="customer">Customer</option>
             <option value="admin">Admin</option>
@@ -113,18 +76,18 @@ export default function Signup() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-blue-600 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          className="mt-2 w-full rounded-md bg-accent py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-accent-dark disabled:opacity-50"
         >
-          {isSubmitting ? 'Creating account...' : 'Sign Up'}
+          {isSubmitting ? 'Creating account…' : 'Sign up'}
         </button>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-muted">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="font-medium text-ink underline underline-offset-4 hover:text-accent-dark">
             Log in
           </Link>
         </p>
       </form>
-    </div>
+    </AuthLayout>
   );
 }
