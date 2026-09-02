@@ -9,13 +9,9 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-
-      
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
-        
       </Route>
-
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
