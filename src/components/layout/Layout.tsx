@@ -1,5 +1,5 @@
 import { Outlet, Link } from 'react-router-dom';
-import { useAuthStore } from '../../../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 
 export default function Layout() {
   const { user, isAuthenticated, logout } = useAuthStore();
