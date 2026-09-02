@@ -32,6 +32,67 @@
   }
 }
 
+@layer utilities {
+  .animate-hero-in {
+    animation: hero-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .car-bob {
+    animation: car-bob 2.4s ease-in-out infinite;
+  }
+  .wheel-spin {
+    animation: wheel-spin 1.4s linear infinite;
+  }
+  .road-dash-fast {
+    animation: road-dash 0.9s linear infinite;
+  }
+  .motion-lines {
+    animation: motion-fade 1.4s ease-in-out infinite;
+  }
+}
+@keyframes car-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes wheel-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes road-dash {
+  to { stroke-dashoffset: -52; }
+}
+
+@keyframes motion-fade {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50% { opacity: 0.9; transform: translateX(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-bob,
+  .wheel-spin,
+  .road-dash-fast,
+  .motion-lines {
+    animation: none;
+  }
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-in {
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .route-dash {
     animation: none;
